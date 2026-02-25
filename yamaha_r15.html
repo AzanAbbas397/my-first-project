@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yamaha R15 — Own the Road</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,700&family=Barlow+Condensed:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════
+   CSS VARIABLES
+═══════════════════════════════════════ */
+:root {
+  --red:       #E8001D;
+  --red-dark:  #b30016;
+  --red-glow:  rgba(232,0,29,0.35);
+  --red-glow2: rgba(232,0,29,0.12);
+  --gold:      #ffa500;
+
+  /* Dark theme */
+  --bg:        #0e0e0e;
+  --bg2:       #161616;
+  --bg3:       #1e1e1e;
+  --surface:   #242424;
+  --surface2:  #2c2c2c;
+  --border:    rgba(255,255,255,0.07);
+  --text:      #f0f0f0;
+  --text-sub:  #aaaaaa;
+  --text-dim:  #666666;
+  --nav-bg:    rgba(14,14,14,0.92);
+  --stat-bg:   #1e1e1e;
+  --stat-border: rgba(232,0,29,0.3);
+
+  --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
+  --radius: 12px;
+}
+[data-theme="light"] {
+  --bg:        #f5f5f5;
+  --bg2:       #ebebeb;
+  --bg3:       #e0e0e0;
+  --surface:   #ffffff;
+  --surface2:  #f0f0f0;
+  --border:    rgba(0,0,0,0.08);
+  --text:      #111111;
+  --text-sub:  #444444;
+  --text-dim:  #888888;
+  --nav-bg:    rgba(245,245,245,0.95);
+  --stat-bg:   #ffffff;
+  --stat-border: rgba(232,0,29,0.4);
+}
+
+/* ═══════════════════════════════════════
+   RESET & BASE
+═══════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Barlow', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+  transition: background var(--transition), color var(--transition);
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════
+   BACKGROUND TEXTURE
+═══════════════════════════════════════ */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 75% 50%, var(--red-glow2) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(232,0,29,0.06) 0%, transparent 60%);
+  pointer-events: none;
+  transition: opacity var(--transition);
+}
+
+/* ═══════════════════════════════════════
+   NAVBAR
+═══════════════════════════════════════ */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2.5rem;
+  height: 80px;
+  background: var(--nav-bg);
+  backdrop-filter: blur(24px) saturate(1.8);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition), border-color var(--transition);
+}
+
+.nav-logo {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 2px; text-decoration: none;
+}
+.nav-logo svg { width: 54px; height: 54px; }
+.nav-logo-text {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 0.3em;
+  color: var(--red);
+}
+
+.nav-links {
+  display: flex; align-items: center; gap: 0.5rem;
+  list-style: none;
+}
+.nav-links a {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600; font-size: 1rem;
+  letter-spacing: 0.05em;
+  color: var(--text);
+  text-decoration: none;
+  padding: 0.5rem 1.1rem;
+  border-radius: 6px;
+  transition: color var(--transition), background var(--transition);
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 0; height: 2px;
+  background: var(--red);
+  transition: width var(--transition);
+  border-radius: 2px;
+}
+.nav-links a:hover::after,
+.nav-links a.active::after { width: 60%; }
+.nav-links a:hover { color: var(--red); }
+.nav-links a.active { color: var(--red); }
+
+.nav-right { display: flex; align-items: center; gap: 1rem; }
+
+/* Theme Toggle */
+.theme-toggle {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 0.35rem 0.8rem 0.35rem 0.5rem;
+  cursor: pointer;
+  transition: background var(--transition), border-color var(--transition);
+  user-select: none;
+}
+.theme-toggle:hover { border-color: var(--red); }
+.toggle-track {
+  width: 36px; height: 20px;
+  background: var(--surface2);
+  border-radius: 100px;
+  position: relative;
+  transition: background var(--transition);
+}
+.toggle-track::after {
+  content: '';
+  position: absolute; top: 3px; left: 3px;
+  width: 14px; height: 14px; border-radius: 50%;
+  background: var(--red);
+  transition: transform var(--transition), background var(--transition);
+}
+[data-theme="light"] .toggle-track { background: #ddd; }
+[data-theme="light"] .toggle-track::after { transform: translateX(16px); }
+.toggle-icon { font-size: 0.85rem; }
+.toggle-label { font-size: 0.78rem; font-weight: 600; color: var(--text-sub); letter-spacing: 0.04em; }
+
+/* Hamburger */
+.hamburger {
+  display: none;
+  flex-direction: column; gap: 5px;
+  background: var(--red);
+  border: none; border-radius: 10px;
+  padding: 12px 14px;
+  cursor: pointer;
+}
+.hamburger span {
+  display: block; width: 22px; height: 2.5px;
+  background: white; border-radius: 2px;
+  transition: transform var(--transition), opacity var(--transition);
+}
+
+/* Mobile menu */
+.mobile-menu {
+  display: none;
+  position: fixed; top: 80px; left: 0; right: 0;
+  background: var(--nav-bg);
+  backdrop-filter: blur(24px);
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 2rem;
+  flex-direction: column; gap: 0.5rem;
+  z-index: 99;
+  transform: translateY(-10px); opacity: 0;
+  transition: opacity var(--transition), transform var(--transition);
+}
+.mobile-menu.open { display: flex; opacity: 1; transform: none; }
+.mobile-menu a {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.3rem; font-weight: 700;
+  color: var(--text); text-decoration: none;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+  transition: color var(--transition);
+}
+.mobile-menu a:hover { color: var(--red); }
+
+/* ═══════════════════════════════════════
+   HERO SECTION
+═══════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 0;
+  padding: 100px 4rem 4rem;
+  position: relative; z-index: 1;
+  overflow: hidden;
+}
+
+/* Diagonal red slash */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 55%; height: 100%;
+  background: linear-gradient(135deg, transparent 0%, var(--red-glow2) 50%, transparent 100%);
+  clip-path: polygon(8% 0, 100% 0, 100% 100%, 0% 100%);
+  pointer-events: none;
+  transition: opacity var(--transition);
+}
+
+.hero-left {
+  display: flex; flex-direction: column;
+  gap: 1.6rem;
+  animation: fadeSlideLeft 0.9s cubic-bezier(0.4,0,0.2,1) both;
+}
+@keyframes fadeSlideLeft {
+  from { opacity: 0; transform: translateX(-40px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: var(--red-glow2);
+  border: 1px solid rgba(232,0,29,0.3);
+  border-radius: 100px;
+  padding: 0.35rem 1rem;
+  width: fit-content;
+}
+.hero-eyebrow span {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.82rem; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--red);
+}
+.eyebrow-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--red);
+  animation: blink 1.8s ease infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.hero-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(3.2rem, 7vw, 6.5rem);
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+}
+.hero-title .line-red {
+  display: block;
+  color: var(--red);
+  text-shadow: 0 0 60px var(--red-glow), 0 0 120px rgba(232,0,29,0.2);
+}
+.hero-title .line-white { display: block; color: var(--text); }
+
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--text-sub);
+  line-height: 1.7;
+  max-width: 480px;
+  font-weight: 400;
+}
+.hero-sub strong { color: var(--text); font-weight: 600; }
+
+.hero-features {
+  display: flex; flex-direction: column; gap: 0.7rem;
+}
+.hero-features-title {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: 0.85rem;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--red);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.feature-item {
+  display: flex; align-items: center; gap: 0.8rem;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 1rem; color: var(--text);
+  font-weight: 500;
+  transition: padding-left var(--transition), color var(--transition);
+}
+.feature-item:hover { padding-left: 0.4rem; color: var(--red); }
+.feature-icon {
+  width: 28px; height: 28px; border-radius: 6px;
+  background: var(--red-glow2);
+  border: 1px solid rgba(232,0,29,0.25);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.9rem; flex-shrink: 0;
+  transition: background var(--transition), transform var(--transition);
+}
+.feature-item:hover .feature-icon {
+  background: var(--red);
+  transform: rotate(-5deg) scale(1.1);
+}
+
+.hero-cta {
+  display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: var(--red);
+  color: #fff;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: 1rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.85rem 2rem;
+  border-radius: var(--radius);
+  border: none; cursor: pointer; text-decoration: none;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+  box-shadow: 0 4px 24px var(--red-glow);
+}
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 40px var(--red-glow);
+  background: var(--red-dark);
+}
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 0.6rem;
+  background: transparent;
+  color: var(--text);
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: 1rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 0.85rem 1.8rem;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border);
+  cursor: pointer; text-decoration: none;
+  transition: border-color var(--transition), color var(--transition), transform var(--transition);
+}
+.btn-secondary:hover {
+  border-color: var(--red); color: var(--red);
+  transform: translateY(-3px);
+}
+
+/* ═══════════════════════════════════════
+   HERO RIGHT — MOTORCYCLE
+═══════════════════════════════════════ */
+.hero-right {
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+  animation: fadeSlideRight 0.9s 0.15s cubic-bezier(0.4,0,0.2,1) both;
+}
+@keyframes fadeSlideRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Glow ring behind bike */
+.bike-glow {
+  position: absolute;
+  width: 480px; height: 320px;
+  background: radial-gradient(ellipse, var(--red-glow) 0%, transparent 70%);
+  border-radius: 50%;
+  animation: pulseGlow 3s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes pulseGlow {
+  from { transform: scale(0.9); opacity: 0.6; }
+  to   { transform: scale(1.1); opacity: 1; }
+}
+
+.bike-img {
+  width: 100%;
+  max-width: 620px;
+  position: relative; z-index: 2;
+  filter: drop-shadow(0 20px 60px rgba(232,0,29,0.4)) drop-shadow(0 0 30px rgba(0,0,0,0.8));
+  animation: float 4s ease-in-out infinite;
+  transition: filter var(--transition);
+}
+@keyframes float {
+  0%,100% { transform: translateY(0px) rotate(0deg); }
+  50%      { transform: translateY(-14px) rotate(0.3deg); }
+}
+
+[data-theme="light"] .bike-img {
+  filter: drop-shadow(0 20px 60px rgba(232,0,29,0.3)) drop-shadow(0 4px 20px rgba(0,0,0,0.2));
+}
+
+/* Ground reflection */
+.bike-ground {
+  position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+  width: 70%; height: 20px;
+  background: radial-gradient(ellipse, rgba(232,0,29,0.25) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(8px);
+  z-index: 1;
+}
+
+/* ═══════════════════════════════════════
+   STATS SECTION
+═══════════════════════════════════════ */
+.stats-section {
+  position: relative; z-index: 1;
+  padding: 0 4rem 5rem;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
+  max-width: 860px;
+}
+
+.stat-card {
+  background: var(--stat-bg);
+  border: 1px solid var(--stat-border);
+  border-radius: var(--radius);
+  padding: 1.4rem 1.8rem;
+  display: flex; align-items: center; gap: 1.2rem;
+  position: relative; overflow: hidden;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition), border-color var(--transition);
+  cursor: default;
+}
+.stat-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px;
+  background: var(--red);
+  border-radius: 2px 0 0 2px;
+}
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(232,0,29,0.2);
+  border-color: rgba(232,0,29,0.5);
+}
+.stat-icon-wrap {
+  width: 46px; height: 46px; border-radius: 10px;
+  background: var(--red-glow2);
+  border: 1px solid rgba(232,0,29,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+  transition: background var(--transition), transform var(--transition);
+}
+.stat-card:hover .stat-icon-wrap {
+  background: var(--red);
+  transform: scale(1.1) rotate(-5deg);
+}
+.stat-info { display: flex; flex-direction: column; gap: 2px; }
+.stat-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-sub);
+}
+.stat-value {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.6rem; font-weight: 900;
+  color: var(--text);
+  line-height: 1;
+}
+.stat-value span { color: var(--red); }
+
+/* ═══════════════════════════════════════
+   SPECS SECTION (extra section below)
+═══════════════════════════════════════ */
+.specs-section {
+  position: relative; z-index: 1;
+  padding: 5rem 4rem;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  transition: background var(--transition);
+}
+.section-eyebrow {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.8rem; font-weight: 700;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 0.6rem;
+}
+.section-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.4rem, 4vw, 4rem);
+  line-height: 0.95;
+  color: var(--text);
+  margin-bottom: 3rem;
+}
+
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
+}
+.spec-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.8rem 1.4rem;
+  text-align: center;
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition);
+}
+.spec-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(232,0,29,0.4);
+  box-shadow: 0 12px 32px rgba(232,0,29,0.12);
+}
+.spec-emoji { font-size: 2rem; margin-bottom: 0.8rem; }
+.spec-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.6rem; line-height: 1;
+  color: var(--red);
+  text-shadow: 0 0 30px var(--red-glow);
+}
+.spec-unit {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1rem; font-weight: 600;
+  color: var(--text-sub);
+  margin-top: 0.2rem;
+}
+.spec-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-dim);
+  margin-top: 0.6rem;
+}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer {
+  position: relative; z-index: 1;
+  background: var(--bg);
+  padding: 3rem 4rem;
+  border-top: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 1rem;
+  transition: background var(--transition), border-color var(--transition);
+}
+.footer-brand {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem; letter-spacing: 0.1em;
+  background: linear-gradient(135deg, var(--red), #ff6b6b);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.footer-copy {
+  font-size: 0.85rem; color: var(--text-dim);
+  font-weight: 400;
+}
+.footer-links {
+  display: flex; gap: 1.5rem; list-style: none;
+}
+.footer-links a {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 600; font-size: 0.9rem;
+  color: var(--text-sub); text-decoration: none;
+  letter-spacing: 0.04em;
+  transition: color var(--transition);
+}
+.footer-links a:hover { color: var(--red); }
+
+/* ═══════════════════════════════════════
+   SCROLL REVEAL
+═══════════════════════════════════════ */
+.reveal {
+  opacity: 0; transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: none; }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .specs-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 820px) {
+  .nav-links { display: none; }
+  .hamburger { display: flex; }
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 100px 1.8rem 2rem;
+    text-align: center;
+    gap: 2rem;
+  }
+  .hero::before { display: none; }
+  .hero-left { align-items: center; }
+  .hero-sub { text-align: center; }
+  .hero-eyebrow, .hero-features-title { margin: 0 auto; }
+  .feature-item { text-align: left; }
+  .hero-right { order: -1; }
+  .bike-img { max-width: 420px; }
+  .stats-section { padding: 0 1.8rem 4rem; }
+  .stats-grid { grid-template-columns: 1fr; }
+  .specs-section { padding: 4rem 1.8rem; }
+  .specs-grid { grid-template-columns: repeat(2, 1fr); }
+  footer { padding: 2.5rem 1.8rem; flex-direction: column; text-align: center; }
+  .footer-links { justify-content: center; }
+}
+@media (max-width: 480px) {
+  nav { padding: 0 1.2rem; }
+  .hero { padding: 90px 1.2rem 2rem; }
+  .hero-title { font-size: 3rem; }
+  .bike-img { max-width: 320px; }
+  .specs-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ═══════════════════════════════════════
+   SCROLLBAR
+═══════════════════════════════════════ */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--red-dark); border-radius: 3px; }
+::selection { background: var(--red); color: #fff; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav>
+  <a href="#" class="nav-logo" aria-label="Yamaha">
+    <!-- Yamaha tuning fork logo SVG -->
+    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="48" fill="#E8001D" stroke="white" stroke-width="3"/>
+      <circle cx="50" cy="50" r="36" fill="none" stroke="white" stroke-width="2.5"/>
+      <!-- Tuning fork / cross -->
+      <line x1="50" y1="18" x2="50" y2="82" stroke="white" stroke-width="5" stroke-linecap="round"/>
+      <line x1="18" y1="50" x2="82" y2="50" stroke="white" stroke-width="5" stroke-linecap="round"/>
+      <!-- Diagonal arms -->
+      <line x1="27" y1="27" x2="73" y2="73" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+      <line x1="73" y1="27" x2="27" y2="73" stroke="white" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- Center dot -->
+      <circle cx="50" cy="50" r="6" fill="white"/>
+    </svg>
+    <span class="nav-logo-text">YAMAHA</span>
+  </a>
+
+  <ul class="nav-links">
+    <li><a href="#" class="active">Home</a></li>
+    <li><a href="#">Blog</a></li>
+    <li><a href="#">Contact us</a></li>
+    <li><a href="#">Product</a></li>
+  </ul>
+
+  <div class="nav-right">
+    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <div class="toggle-track"></div>
+      <span class="toggle-icon" id="themeIcon">🌙</span>
+      <span class="toggle-label" id="themeLabel">Dark</span>
+    </button>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Mobile menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#">Home</a>
+  <a href="#">Blog</a>
+  <a href="#">Contact us</a>
+  <a href="#">Product</a>
+</div>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero">
+  <!-- LEFT CONTENT -->
+  <div class="hero-left">
+    <div class="hero-eyebrow">
+      <div class="eyebrow-dot"></div>
+      <span>Ride the Future — Yamaha R15</span>
+    </div>
+
+    <h1 class="hero-title">
+      <span class="line-red">Yamaha R15 —</span>
+      <span class="line-red">Own the Road.</span>
+      <span class="line-white">Feel the Rush. 🔥</span>
+    </h1>
+
+    <p class="hero-sub">
+      Turn every street into a racetrack with the <strong>Yamaha R15</strong>, a bike built for riders who crave style, speed, and precision. Inspired by Yamaha's legendary racing DNA, the R15 delivers razor-sharp handling, aggressive aerodynamics, and thrilling performance—without compromising everyday comfort.
+    </p>
+
+    <div class="hero-features">
+      <div class="hero-features-title">✨ Why You'll Love It</div>
+      <div class="feature-item">
+        <div class="feature-icon">🏎️</div>
+        Sporty, race-inspired design that turns heads
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">⚡</div>
+        Powerful yet fuel-efficient engine
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">📱</div>
+        Advanced digital console and modern tech
+      </div>
+      <div class="feature-item">
+        <div class="feature-icon">🎯</div>
+        Smooth handling — city rides &amp; weekend sprints
+      </div>
+    </div>
+
+    <div class="hero-cta">
+      <a href="#" class="btn-primary">
+        Book a Test Ride
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#" class="btn-secondary">
+        Explore Specs
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 9l-7 7-7-7"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- RIGHT — BIKE -->
+  <div class="hero-right">
+    <div class="bike-glow"></div>
+
+    <!-- SVG Yamaha R15 Motorcycle Illustration -->
+    <svg class="bike-img" viewBox="0 0 680 420" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bodyGrad" cx="50%" cy="40%" r="60%">
+          <stop offset="0%" stop-color="#FF2A40"/>
+          <stop offset="50%" stop-color="#E8001D"/>
+          <stop offset="100%" stop-color="#8B0010"/>
+        </radialGradient>
+        <radialGradient id="wheelGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#3a3a3a"/>
+          <stop offset="70%" stop-color="#1a1a1a"/>
+          <stop offset="100%" stop-color="#0a0a0a"/>
+        </radialGradient>
+        <radialGradient id="rimGrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#888"/>
+          <stop offset="100%" stop-color="#333"/>
+        </radialGradient>
+        <linearGradient id="engineGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#555"/>
+          <stop offset="100%" stop-color="#222"/>
+        </linearGradient>
+        <linearGradient id="exhaustGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#888"/>
+          <stop offset="100%" stop-color="#444"/>
+        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="3" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <filter id="softShadow">
+          <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.5"/>
+        </filter>
+      </defs>
+
+      <!-- GROUND SHADOW -->
+      <ellipse cx="340" cy="405" rx="240" ry="14" fill="rgba(0,0,0,0.4)" filter="url(#softShadow)"/>
+
+      <!-- ═══ REAR WHEEL ═══ -->
+      <g transform="translate(160, 295)">
+        <circle r="88" fill="url(#wheelGrad)" stroke="#111" stroke-width="2"/>
+        <!-- Tyre detail -->
+        <circle r="88" fill="none" stroke="#2a2a2a" stroke-width="18"/>
+        <!-- Rim -->
+        <circle r="60" fill="url(#rimGrad)" stroke="#555" stroke-width="2"/>
+        <circle r="60" fill="none" stroke="#666" stroke-width="1.5" stroke-dasharray="6 6"/>
+        <!-- Spokes -->
+        <line x1="0" y1="-56" x2="0" y2="56" stroke="#666" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="-56" y1="0" x2="56" y2="0" stroke="#666" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="-40" y1="-40" x2="40" y2="40" stroke="#555" stroke-width="2" stroke-linecap="round"/>
+        <line x1="40" y1="-40" x2="-40" y2="40" stroke="#555" stroke-width="2" stroke-linecap="round"/>
+        <!-- Brake disc (inner) -->
+        <circle r="36" fill="#1a1a1a" stroke="#777" stroke-width="3"/>
+        <circle r="36" fill="none" stroke="#555" stroke-width="1" stroke-dasharray="4 8" stroke-linecap="round"/>
+        <!-- Hub -->
+        <circle r="12" fill="#333" stroke="#888" stroke-width="2"/>
+        <circle r="5" fill="#aaa"/>
+      </g>
+
+      <!-- ═══ FRONT WHEEL ═══ -->
+      <g transform="translate(510, 308)">
+        <circle r="75" fill="url(#wheelGrad)" stroke="#111" stroke-width="2"/>
+        <circle r="75" fill="none" stroke="#2a2a2a" stroke-width="16"/>
+        <circle r="50" fill="url(#rimGrad)" stroke="#555" stroke-width="2"/>
+        <circle r="50" fill="none" stroke="#666" stroke-width="1.5" stroke-dasharray="5 5"/>
+        <line x1="0" y1="-46" x2="0" y2="46" stroke="#666" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="-46" y1="0" x2="46" y2="0" stroke="#666" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="-33" y1="-33" x2="33" y2="33" stroke="#555" stroke-width="2" stroke-linecap="round"/>
+        <line x1="33" y1="-33" x2="-33" y2="33" stroke="#555" stroke-width="2" stroke-linecap="round"/>
+        <circle r="30" fill="#1a1a1a" stroke="#777" stroke-width="3"/>
+        <circle r="30" fill="none" stroke="#555" stroke-width="1" stroke-dasharray="3 7" stroke-linecap="round"/>
+        <circle r="10" fill="#333" stroke="#888" stroke-width="2"/>
+        <circle r="4" fill="#aaa"/>
+      </g>
+
+      <!-- ═══ SWING ARM / CHAIN AREA ═══ -->
+      <polygon points="200,295 280,285 390,300 380,310 200,308" fill="#1a1a1a" stroke="#333" stroke-width="1.5"/>
+
+      <!-- ═══ ENGINE BLOCK ═══ -->
+      <rect x="230" y="270" width="160" height="90" rx="8" fill="url(#engineGrad)" stroke="#444" stroke-width="1.5"/>
+      <rect x="240" y="280" width="60" height="30" rx="4" fill="#333" stroke="#555" stroke-width="1"/>
+      <rect x="310" y="280" width="60" height="30" rx="4" fill="#333" stroke="#555" stroke-width="1"/>
+      <!-- Cylinder head fins -->
+      <rect x="248" y="275" width="44" height="4" rx="1" fill="#444"/>
+      <rect x="248" y="268" width="44" height="4" rx="1" fill="#3d3d3d"/>
+      <rect x="248" y="261" width="44" height="4" rx="1" fill="#444"/>
+
+      <!-- ═══ EXHAUST PIPE ═══ -->
+      <path d="M 270 355 Q 320 370 400 360 Q 470 352 510 340 L 520 345 Q 465 360 400 368 Q 320 378 265 362 Z" fill="url(#exhaustGrad)" stroke="#555" stroke-width="1"/>
+      <!-- Exhaust tip -->
+      <ellipse cx="520" cy="342" rx="14" ry="7" fill="#555" stroke="#888" stroke-width="1.5"/>
+      <ellipse cx="520" cy="342" rx="10" ry="5" fill="#222"/>
+
+      <!-- ═══ CHAIN GUARD ═══ -->
+      <path d="M 160 305 Q 200 295 240 298 Q 240 310 200 310 Z" fill="#1a1a1a" stroke="#333" stroke-width="1"/>
+
+      <!-- ═══ MAIN BODY / FAIRING ═══ -->
+      <!-- Lower belly fairing -->
+      <path d="M 220 300 Q 280 310 380 305 Q 430 302 470 295 Q 480 290 470 270 Q 420 280 340 275 Q 270 272 230 278 Z" fill="#cc001a" stroke="#aa0015" stroke-width="1"/>
+
+      <!-- Main upper fairing — iconic R15 shape -->
+      <path d="
+        M 180 260
+        Q 200 190 250 155
+        Q 300 125 360 120
+        Q 430 118 480 140
+        Q 530 160 555 185
+        Q 575 205 570 230
+        Q 560 250 530 260
+        Q 490 268 430 265
+        Q 360 262 280 265
+        Q 230 267 200 270
+        Z
+      " fill="url(#bodyGrad)" stroke="#aa0015" stroke-width="2" filter="url(#glow)"/>
+
+      <!-- Belly pan -->
+      <path d="M 200 270 Q 260 280 360 278 Q 440 275 510 265 L 505 300 Q 430 308 340 308 Q 250 308 195 298 Z" fill="#c0001a" stroke="#900012" stroke-width="1.5"/>
+
+      <!-- ═══ SEAT / TAIL SECTION ═══ -->
+      <path d="
+        M 180 260
+        Q 170 240 175 220
+        Q 178 200 195 185
+        Q 215 185 230 200
+        Q 245 215 250 240
+        Q 240 260 200 265
+        Z
+      " fill="#D00018" stroke="#aa0015" stroke-width="1.5"/>
+
+      <!-- Seat -->
+      <path d="M 175 215 Q 185 180 220 175 Q 240 175 250 195 Q 240 210 200 215 Z" fill="#222" stroke="#333" stroke-width="1.5" rx="8"/>
+
+      <!-- Tail light -->
+      <path d="M 175 225 Q 170 220 175 215 L 182 218 Q 180 222 180 228 Z" fill="#FF4444" opacity="0.9"/>
+      <!-- Rear indicator -->
+      <ellipse cx="176" cy="232" rx="5" ry="3" fill="#FF8800" opacity="0.8"/>
+
+      <!-- ═══ WINDSCREEN / VISOR ═══ -->
+      <path d="
+        M 490 148
+        Q 530 155 555 175
+        Q 570 192 565 215
+        Q 545 200 510 188
+        Q 495 182 480 175
+        Q 470 162 490 148
+        Z
+      " fill="rgba(120,200,255,0.18)" stroke="rgba(180,220,255,0.5)" stroke-width="1.5"/>
+      <!-- Windscreen highlight -->
+      <path d="M 500 158 Q 525 165 545 180" stroke="rgba(255,255,255,0.4)" stroke-width="2" fill="none" stroke-linecap="round"/>
+
+      <!-- ═══ HEADLIGHT ═══ -->
+      <path d="M 542 175 Q 570 185 575 205 Q 565 220 545 215 Q 530 205 525 190 Z" fill="#FFE880" opacity="0.95" filter="url(#glow)"/>
+      <path d="M 545 178 Q 568 188 572 207" stroke="white" stroke-width="1.5" fill="none" opacity="0.6"/>
+      <!-- DRL strip -->
+      <path d="M 535 180 Q 555 172 568 178" stroke="#FFE880" stroke-width="3" fill="none" stroke-linecap="round" opacity="0.7"/>
+
+      <!-- ═══ FRONT FORK ═══ -->
+      <path d="M 490 260 Q 500 280 510 308 L 522 306 Q 513 278 505 258 Z" fill="#888" stroke="#666" stroke-width="1"/>
+      <path d="M 502 262 Q 512 282 522 308 L 530 306 Q 522 280 514 260 Z" fill="#777" stroke="#555" stroke-width="1"/>
+
+      <!-- Front mudguard -->
+      <path d="M 490 255 Q 480 270 478 290 Q 500 278 520 272 Q 516 255 505 248 Z" fill="url(#bodyGrad)" stroke="#aa0015" stroke-width="1.5"/>
+
+      <!-- ═══ HANDLEBAR / COCKPIT ═══ -->
+      <rect x="468" y="168" width="70" height="8" rx="4" fill="#333" stroke="#555" stroke-width="1.5"/>
+      <!-- Handlebar grips -->
+      <rect x="468" y="165" width="14" height="14" rx="4" fill="#111" stroke="#444" stroke-width="1"/>
+      <rect x="524" y="165" width="14" height="14" rx="4" fill="#111" stroke="#444" stroke-width="1"/>
+      <!-- Instrument cluster -->
+      <rect x="490" y="152" width="36" height="20" rx="4" fill="#111" stroke="#444" stroke-width="1.5"/>
+      <rect x="493" y="155" width="30" height="14" rx="3" fill="#0a1a0a"/>
+      <!-- TFT display glow -->
+      <rect x="493" y="155" width="30" height="14" rx="3" fill="rgba(0,255,100,0.12)"/>
+      <text x="497" y="165" font-family="monospace" font-size="6" fill="#00ff66" opacity="0.8">R15 V4</text>
+
+      <!-- ═══ RIDER FOOTPEG ═══ -->
+      <line x1="350" y1="330" x2="360" y2="350" stroke="#555" stroke-width="3" stroke-linecap="round"/>
+      <line x1="340" y1="350" x2="375" y2="350" stroke="#444" stroke-width="4" stroke-linecap="round"/>
+
+      <!-- ═══ FAIRING DETAILS ═══ -->
+      <!-- Side air vent lines -->
+      <path d="M 310 150 Q 340 148 370 150" stroke="rgba(255,255,255,0.15)" stroke-width="2" fill="none"/>
+      <path d="M 300 162 Q 340 159 375 162" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" fill="none"/>
+      <!-- R15 badge area -->
+      <rect x="320" y="210" width="60" height="22" rx="4" fill="rgba(0,0,0,0.3)" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      <text x="322" y="226" font-family="'Bebas Neue',sans-serif" font-size="15" fill="white" opacity="0.9" letter-spacing="2">R15 V4</text>
+
+      <!-- ═══ REAR SHOCK / LINKAGE ═══ -->
+      <line x1="210" y1="295" x2="280" y2="270" stroke="#555" stroke-width="5" stroke-linecap="round"/>
+      <line x1="250" y1="295" x2="290" y2="270" stroke="#444" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+
+    <div class="bike-ground"></div>
+  </div>
+</section>
+
+<!-- ═══════════════ STATS ═══════════════ -->
+<section class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-card reveal">
+      <div class="stat-icon-wrap">🏎️</div>
+      <div class="stat-info">
+        <div class="stat-label">Top Speed</div>
+        <div class="stat-value"><span>+104</span> KMPH</div>
+      </div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-icon-wrap">💰</div>
+      <div class="stat-info">
+        <div class="stat-label">Starting Price</div>
+        <div class="stat-value"><span>$104</span>K</div>
+      </div>
+    </div>
+    <div class="stat-card reveal">
+      <div class="stat-icon-wrap">👥</div>
+      <div class="stat-info">
+        <div class="stat-label">Satisfied Riders</div>
+        <div class="stat-value"><span>+10</span>M</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SPECS SECTION ═══════════════ -->
+<section class="specs-section">
+  <div class="section-eyebrow">Technical Excellence</div>
+  <h2 class="section-title">Performance by<br>the Numbers</h2>
+  <div class="specs-grid">
+    <div class="spec-card reveal">
+      <div class="spec-emoji">⚙️</div>
+      <div class="spec-num">155</div>
+      <div class="spec-unit">CC Engine</div>
+      <div class="spec-name">Displacement</div>
+    </div>
+    <div class="spec-card reveal">
+      <div class="spec-emoji">💨</div>
+      <div class="spec-num">18.4</div>
+      <div class="spec-unit">BHP @ 10,000 RPM</div>
+      <div class="spec-name">Max Power</div>
+    </div>
+    <div class="spec-card reveal">
+      <div class="spec-emoji">🔩</div>
+      <div class="spec-num">14.2</div>
+      <div class="spec-unit">Nm @ 8,500 RPM</div>
+      <div class="spec-name">Peak Torque</div>
+    </div>
+    <div class="spec-card reveal">
+      <div class="spec-emoji">⚖️</div>
+      <div class="spec-num">141</div>
+      <div class="spec-unit">Kilograms</div>
+      <div class="spec-name">Kerb Weight</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="footer-brand">YAMAHA R15</div>
+  <ul class="footer-links">
+    <li><a href="#">Privacy</a></li>
+    <li><a href="#">Terms</a></li>
+    <li><a href="#">Support</a></li>
+    <li><a href="#">Dealers</a></li>
+  </ul>
+  <p class="footer-copy">© 2026 Yamaha Motor Co., Ltd. All rights reserved.</p>
+</footer>
+
+<script>
+  // ── Theme Toggle ──
+  const html = document.documentElement;
+  const btn  = document.getElementById('themeToggle');
+  const icon = document.getElementById('themeIcon');
+  const lbl  = document.getElementById('themeLabel');
+
+  btn.addEventListener('click', () => {
+    const isDark = html.dataset.theme === 'dark';
+    html.dataset.theme = isDark ? 'light' : 'dark';
+    icon.textContent = isDark ? '☀️' : '🌙';
+    lbl.textContent  = isDark ? 'Light' : 'Dark';
+  });
+
+  // ── Hamburger ──
+  const ham  = document.getElementById('hamburger');
+  const menu = document.getElementById('mobileMenu');
+  ham.addEventListener('click', () => {
+    const open = menu.classList.toggle('open');
+    ham.querySelector('span:nth-child(1)').style.transform = open ? 'rotate(45deg) translate(5px,5px)' : '';
+    ham.querySelector('span:nth-child(2)').style.opacity  = open ? '0' : '1';
+    ham.querySelector('span:nth-child(3)').style.transform = open ? 'rotate(-45deg) translate(5px,-5px)' : '';
+  });
+
+  // ── Scroll Reveal ──
+  const reveals = document.querySelectorAll('.reveal');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  reveals.forEach(el => obs.observe(el));
+
+  // ── Animated stat counters ──
+  function animateCount(el, target, suffix, duration = 1500) {
+    let start = 0;
+    const step = target / (duration / 16);
+    const timer = setInterval(() => {
+      start = Math.min(start + step, target);
+      el.innerHTML = `<span>+${Math.round(start)}</span> ${suffix}`;
+      if (start >= target) clearInterval(timer);
+    }, 16);
+  }
+
+  const statCards = document.querySelectorAll('.stat-card');
+  const statObs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const valEl = e.target.querySelector('.stat-value');
+        const card = e.target;
+        if (card === statCards[0]) animateCount(valEl, 104, 'KMPH');
+        if (card === statCards[1]) { setTimeout(() => animateCount(valEl, 104, 'K'), 200); }
+        if (card === statCards[2]) { setTimeout(() => animateCount(valEl, 10, 'M'), 400); }
+        statObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.5 });
+  statCards.forEach(el => statObs.observe(el));
+</script>
+</body>
+</html>
